@@ -26,6 +26,7 @@
     import headerItem from '../../components/header.vue'
     import loading from '../../components/loading.vue'
     import alertTip from '../../components/alertTip.vue'
+    import {userLogin} from '../../service/getData';
 
     export default {
         data () {
@@ -43,7 +44,7 @@
             alertTip
         },
         methods : {
-            handlerLogin : function() {
+            async handlerLogin () {
 
                 if(this.name == "" || !this.name) {
                     this.alertText = "请输入用户名";
@@ -56,6 +57,13 @@
                     this.showAlert = true;
                     return;
                 }
+
+
+                let userInfo = await userLogin(this.name,this.pwd);
+                console.log('userInfo');
+                console.log(userInfo);
+
+
                 
                 
             },
@@ -93,5 +101,8 @@
        color: #fff;
        border-radius: 3px;
        margin-top: 10%;
+   }
+   body{
+       overflow: hidden;
    }
 </style>

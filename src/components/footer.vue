@@ -1,9 +1,9 @@
 <template>
    <div class="footer">
        <ul class="f-ul">
-           <li class="f-item" :class="{active : page == 'home'}">首页</li>
-           <li class="f-item" :class="{active : page == 'user'}">提问</li>
-           <li class="f-item" :class="{active : page == 'mine'}">我的</li>
+           <li class="f-item" :class="{active : page == 'home'}" @click="handlerHomePage">首页</li>
+           <li class="f-item" :class="{active : page == 'ask'}" @click="handlerUserListPage">提问</li>
+           <li class="f-item" :class="{active : page == 'mine'}" @click="handlerMinePage">我的</li>
        </ul>
    </div>
 </template>
@@ -12,7 +12,19 @@
 <script>
     export default {
         name : 'footer',
-        props : ['page']
+        props : ['page'],
+        methods: {
+
+            handlerHomePage() {
+                this.$router.push('/');
+            },
+            handlerUserListPage() {
+                this.$router.push('userList');
+            },
+            handlerMinePage() {
+                this.$router.push('mine');
+            },
+        },
     }
 </script>
 

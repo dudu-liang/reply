@@ -30,11 +30,12 @@
     background-color: rgba(0, 0, 0, 0.2);
 }
 .alert-box{
-    width: 80%;
+    width: 75%;
     margin-top: 55%;
-    margin-left: 10%;
+    margin-left: 12.5%;
     border-radius: 5px;
     background-color: #fff;
+    border:solid 1px #eee;
 }
 .alert-content{
     text-align: center;

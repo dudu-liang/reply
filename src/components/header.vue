@@ -25,5 +25,9 @@
         font-size: 15px;
         background-color: #d81e06;
         text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 3;
     }
 </style>

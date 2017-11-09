@@ -10,7 +10,7 @@
 }
 html,body{
     width: 100%;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     background-color: #fff;
     font-size: 14px;
     font-family: "MicrosoftYaHei","helvetica";
