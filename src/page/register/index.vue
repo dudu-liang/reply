@@ -94,12 +94,17 @@
                     return;
                 }
 
-                alert(this.username);
-                alert(this.pwd);
-
                 let userInfo = await userRegister(this.name,this.username,this.pwd);
-                console.log('userInfo');
-                console.log(userInfo);
+                if(userInfo.status == 200) {
+                    this.alertText = '注册成功';
+                    this.showAlert = true;
+                    setTimeout(function() {
+                        this.$router.push('/home');
+                    }.bind(this), 1500);
+                }else{
+                    this.alertText = userInfo.message;
+                    this.showAlert = true;
+                }
                 
             },
 

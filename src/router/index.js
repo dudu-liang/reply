@@ -12,6 +12,9 @@ export default new Router({
         path: '',
         component: r => require.ensure([], () => r(require('../page/home')), 'home') //首页
     },{
+        path: '/home',
+        component: r => require.ensure([], () => r(require('../page/home')), 'home') //首页
+    },{
         path: '/login',
         component: r => require.ensure([], () => r(require('../page/login')), 'login') //登录页面
     },{

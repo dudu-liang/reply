@@ -60,8 +60,16 @@
 
 
                 let userInfo = await userLogin(this.name,this.pwd);
-                console.log('userInfo');
-                console.log(userInfo);
+                if(userInfo.status == 200) {
+                    this.alertText = '登陆成功';
+                    this.showAlert = true;
+                    setTimeout(function() {
+                        this.$router.push('/home');
+                    }.bind(this), 1500);
+                }else{
+                    this.alertText = userInfo.message;
+                    this.showAlert = true;
+                }
 
 
                 
