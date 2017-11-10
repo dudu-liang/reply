@@ -2,24 +2,27 @@
 
     <div class="mine-content">
 
+        <loading v-if="loadingStatus"></loading>
+        <alert-tip v-if="showAlert" :alertText="alertText" @closeView="closeTip"></alert-tip>
+
         <div class="top">
             <div class="left">
-                <p class="head"></p>
+                <p class="head" :style="{backgroundImage:'url(' + baseUrl + avatar + ')'}"></p>
             </div>
             <div class="right">
-                <p class="user-name">嘟嘟</p>
-                <p class="desc">这是我的介绍哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                <p class="user-name">{{username}}</p>
+                <p class="desc">{{description == "" ? "无" : description}}</p>
             </div>
         </div>
 
         <div class="content">
            
-           <textarea class="area" placeholder="请输入你的问题，并以问号结尾(不超过100个字)..." maxlength="100"></textarea>
+           <textarea class="area" placeholder="请输入你的问题，并以问号结尾(不超过100个字)..." maxlength="100" v-model="content"></textarea>
              
         </div>
 
         <div class="text-center">
-            <button type="button" class="submit">确认提交</button>
+            <button type="button" class="submit" @click="handlerSubmit">确认提交</button>
         </div>
 
         <footer-item page="ask"></footer-item>
@@ -29,12 +32,71 @@
 
 <script>
 
-    import footerItem from '../../components/footer'
+    import footerItem from '../../components/footer';
+    import loading from '../../components/loading.vue'
+    import alertTip from '../../components/alertTip.vue'
+    import {getStore,getQuery} from '../../config/mUtils';
+    import {userOne,askSave} from '../../service/getData';
+    import {baseUrl} from '../../config/env';
     
     export default {
+
         name : 'ask',
+
+        data () {
+           return {
+               avatar : null,
+               description : null,
+               username : null,
+               baseUrl,
+               replyId : null,
+               content : null,
+               loadingStatus : false,
+               alertText : null,
+               showAlert : false
+           }
+        },
+
         components : {
-            footerItem
+            footerItem,
+            loading,
+            alertTip
+        },
+
+        created () {
+
+            this.getUserData();
+
+        },
+
+        methods : {
+
+            async getUserData() {
+
+                this.replyId = getQuery('id');
+                let userData = await userOne(this.replyId);
+                    this.avatar = userData.data.avatar;
+                    this.username = userData.data.username;
+                    this.description = userData.data.description;
+             
+            },
+
+            async handlerSubmit () {
+
+                if(!this.content || this.content == "") {
+                    this.alertText = '请输入你要提问的问题';
+                    this.showAlert = true;
+                    return;
+                }
+                let askId = getStore('userId');
+                let askData = await askSave(this.replyId,askId,this.content);
+                console.log(askData);
+
+            },
+
+            closeTip () {
+                this.showAlert = false;
+            }
         }
     }
 </script>

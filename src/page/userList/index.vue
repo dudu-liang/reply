@@ -3,72 +3,23 @@
 
     <div class="mine-content">
 
+        <alert-tip v-if="showAlert" :alertText="alertText" @closeView="closeTip"></alert-tip>
+
         <div class="content">
 
-            <div class="item">
+            <div class="item" v-for="item in list" :key="item._id">
 
                 <div class="top">
                     <div class="left">
-                        <p class="head"></p>
+                        <p class="head" :style="{backgroundImage:'url(' + baseUrl + item.avatar + ')'}"></p>
                     </div>
                     <div class="right">
-                        <p class="user-name">嘟嘟</p>
-                        <p class="desc">这是我的介绍哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                        <p class="user-name">{{item.username}}</p>
+                        <p class="desc">{{item.description == "" ? "无" : item.description}}</p>
                     </div>
                 </div>
                 <div class="btn-box">
-                     <button type="button" class="ask-btn">提问</button>
-                </div>
-
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                    </div>
-                    <div class="right">
-                        <p class="user-name">嘟嘟</p>
-                        <p class="desc">这是我的介绍哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
-                    </div>
-                </div>
-                <div class="btn-box">
-                     <button type="button" class="ask-btn">提问</button>
-                </div>
-
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                    </div>
-                    <div class="right">
-                        <p class="user-name">嘟嘟</p>
-                        <p class="desc">这是我的介绍哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
-                    </div>
-                </div>
-                <div class="btn-box">
-                     <button type="button" class="ask-btn">提问</button>
-                </div>
-
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                    </div>
-                    <div class="right">
-                        <p class="user-name">嘟嘟</p>
-                        <p class="desc">这是我的介绍哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
-                    </div>
-                </div>
-                <div class="btn-box">
-                     <button type="button" class="ask-btn">提问</button>
+                     <button type="button" class="ask-btn" @click="handlerAsk(item._id)">提问</button>
                 </div>
 
             </div>
@@ -84,13 +35,56 @@
 
 <script>
 
-    import footerItem from '../../components/footer'
+    import footerItem from '../../components/footer';
+    import alertTip from '../../components/alertTip.vue'
+    import {userList} from '../../service/getData';
+    import {baseUrl} from '../../config/env';
+    import {getStore} from '../../config/mUtils';
     
     export default {
         name : 'userList',
+
+        data () {
+           return {
+               list : [],
+               baseUrl : baseUrl,
+               showAlert : false,
+               alertText : null
+           }
+        },
+
         components : {
-            footerItem
-        }
+            footerItem,
+            alertTip
+        },
+
+        mounted () {
+           this.getList();
+        },
+
+        methods: {
+
+            async getList() {
+                let userData = await userList();
+                this.list = userData.data;
+            },
+
+            handlerAsk (id) {
+                let userId = getStore('userId');
+                if(userId == id) {
+                    this.alertText = '不能向自己提问哦';
+                    this.showAlert = true;
+                }else{
+                    this.$router.push('/ask?id=' + id);
+                }
+                
+
+            },
+
+            closeTip : function () {
+                this.showAlert = false;
+            },
+        },
     }   
 </script>
 
@@ -125,7 +119,7 @@
        display: inline-block;
        background-color: #f2f2f2;
        vertical-align: middle;
-       background-image: url('../../assets/head.jpg');
+       /* background-image: url('../../assets/head.jpg'); */
        background-position: center center;
        background-repeat: no-repeat;
        background-size: cover;

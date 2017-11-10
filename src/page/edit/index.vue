@@ -8,23 +8,23 @@
             
             <div class="line">
                 <span class="name">头像：</span>
-                <div class="head-box">
+                <div class="head-box" :style="{backgroundImage:'url(' + baseUrl + avatar + ')'}">
                    <input type="file" name="head" class="head-img" id="uploadImg" />
                 </div>
             </div>
 
             <div class="line">
                 <span class="name">昵称：</span>
-                <input type="text" class="inp" placeholder="请输入你的昵称"/>
+                <input type="text" class="inp" v-model="username" placeholder="请输入你的昵称"/>
             </div>
 
             <div class="line">
                 <span class="name">简介：</span>
-                <textarea name="desc" class="desc" placeholder="请介绍你自己（不超过100字）" maxlength="100"></textarea>
+                <textarea name="desc" class="desc" v-model="description" placeholder="请介绍你自己（不超过100字）" maxlength="100"></textarea>
             </div>
 
             <div class="text-center">
-                <button type="button" class="submit">确认修改</button>
+                <button type="button" class="submit" @click="handlerEdit">确认修改</button>
             </div>
 
         </div>
@@ -37,6 +37,12 @@
     import loading from '../../components/loading.vue'
     import alertTip from '../../components/alertTip.vue'
 
+    import {userOne,userUpdate} from '../../service/getData';
+    import {baseUrl} from '../../config/env';
+    import {getStore,clearStore} from '../../config/mUtils';
+
+
+
     export default {
         name : 'edit',
         data () {
@@ -45,13 +51,53 @@
               showAlert : false,
               alertText : null,
               username : null,
-              description : null
+              description : null,
+              avatar : null,
+              baseUrl
           }
         },
+
         components : {
             headerItem,
             loading,
             alertTip
+        },
+
+        mounted () {
+
+            this.getUserData();
+
+        },
+
+        methods: {
+
+            async getUserData() {
+
+                let userId = getStore('userId');
+
+                let userData = await userOne(userId);
+                    this.avatar = userData.data.avatar;
+                    this.username = userData.data.username;
+                    this.description = userData.data.description;
+             
+            },
+
+            async handlerEdit () {
+
+                let userId = getStore('userId');
+
+                let editData = await userUpdate(userId,this.username,this.description);
+
+                this.alertText = editData.message;
+                this.showAlert = true;
+
+            },
+
+            closeTip () {
+
+                this.showAlert = false;
+
+            }
         },
     }
 </script>
@@ -79,7 +125,6 @@
        border-radius: 40px;
        background-color: #f2f2f2;
        vertical-align: middle;
-       background-image: url('../../assets/head.jpg');
        background-position: center center;
        background-size: cover;
        position: relative;

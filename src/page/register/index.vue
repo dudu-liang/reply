@@ -25,6 +25,7 @@
 
             <div class="line">
                 <button type="button" class="btn" @click="handlerLogin">确认注册</button>
+                <div class="no-user" @click="handlerLoginPage">已有账号？去登录</div>
             </div>
 
         </div>
@@ -33,10 +34,11 @@
 
 
 <script>
-    import headerItem from '../../components/header.vue'
-    import loading from '../../components/loading.vue'
-    import alertTip from '../../components/alertTip.vue'
+    import headerItem from '../../components/header.vue';
+    import loading from '../../components/loading.vue';
+    import alertTip from '../../components/alertTip.vue';
     import {userRegister} from '../../service/getData';
+    import {setStore}  from '../../config/mUtils';
 
     export default {
         data () {
@@ -98,6 +100,7 @@
                 if(userInfo.status == 200) {
                     this.alertText = '注册成功';
                     this.showAlert = true;
+                    setStore('userId',userInfo.data.id);
                     setTimeout(function() {
                         this.$router.push('/home');
                     }.bind(this), 1500);
@@ -110,13 +113,17 @@
 
             closeTip : function () {
                 this.showAlert = false;
+            },
+
+            handlerLoginPage : function() {
+                this.$router.push('login');
             }
         }
         
     }
 </script>
 
-<style scope>
+<style scoped>
     .container{
         width: 100%;
         margin-top: 20%;
@@ -142,6 +149,12 @@
        color: #fff;
        border-radius: 3px;
        margin-top: 10%;
+   }
+   .no-user{
+       font-size: 13px;
+       color:#1296db;
+       height: 30px;
+       line-height: 30px;
    }
    body{
        overflow: hidden;

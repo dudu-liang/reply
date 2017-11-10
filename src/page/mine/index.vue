@@ -3,11 +3,11 @@
 
         <div class="top">
             <div class="left">
-                <p class="head"></p>
+                <p class="head" :style="{backgroundImage:'url(' + baseUrl + avatar + ')'}"></p>
             </div>
             <div class="right">
-                <p class="user-name">嘟嘟</p>
-                <p class="desc">这是我的介绍哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                <p class="user-name">{{username}}</p>
+                <p class="desc">{{description == '' ? '无' : description}}</p>
             </div>
         </div>
 
@@ -32,24 +32,60 @@
                   <img src="../../assets/right-arrow.png" class="right-arrow">
              </div>
         </div>
-        <div class="log-out">
+        <div class="log-out" @click="handlerLogout">
             退出登录
         </div>
     </div>
 </template>
 
 <script>
+
+    import {userOne} from '../../service/getData';
+    import {baseUrl} from '../../config/env';
+    import {getStore,clearStore} from '../../config/mUtils';
+
     export default {
         name : 'mine',
         data () {
             return {
-
+               avatar : null,
+               username : null,
+               description : null,
+               baseUrl
             }
         },
+        mounted () {
+
+            this.getUserData();
+
+        },
+
+
         methods: {
+
             handlerPage() {
                 this.$router.push('edit');
+            },
+
+            async getUserData() {
+
+                let userId = getStore('userId');
+
+                let userData = await userOne(userId);
+                this.avatar = userData.data.avatar;
+                this.username = userData.data.username;
+                this.description = userData.data.description;
+             
+            },
+
+            handlerLogout () {
+                clearStore('userId');
+                setTimeout(function() {
+                    this.$router.push('login');
+                }.bind(this),1500);
             }
+
+
         },
     }
 </script>

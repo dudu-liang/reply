@@ -15,6 +15,7 @@
             </div>
             <div class="line">
                 <button type="button" class="btn" @click="handlerLogin">确认登录</button>
+                <div class="no-user" @click="handlerRegister">还没账号？去注册</div>
             </div>
 
         </div>
@@ -27,6 +28,7 @@
     import loading from '../../components/loading.vue'
     import alertTip from '../../components/alertTip.vue'
     import {userLogin} from '../../service/getData';
+    import {setStore}  from '../../config/mUtils';
 
     export default {
         data () {
@@ -63,6 +65,7 @@
                 if(userInfo.status == 200) {
                     this.alertText = '登陆成功';
                     this.showAlert = true;
+                    setStore('userId',userInfo.data.id);
                     setTimeout(function() {
                         this.$router.push('/home');
                     }.bind(this), 1500);
@@ -70,20 +73,19 @@
                     this.alertText = userInfo.message;
                     this.showAlert = true;
                 }
-
-
-                
-                
             },
             closeTip : function () {
                 this.showAlert = false;
+            },
+            handlerRegister : function() {
+                this.$router.push('register');
             }
         }
         
     }
 </script>
 
-<style scope>
+<style scoped>
     .container{
         width: 100%;
         margin-top: 40%;
@@ -109,6 +111,12 @@
        color: #fff;
        border-radius: 3px;
        margin-top: 10%;
+   }
+   .no-user{
+       font-size: 13px;
+       color:#1296db;
+       height: 30px;
+       line-height: 30px;
    }
    body{
        overflow: hidden;

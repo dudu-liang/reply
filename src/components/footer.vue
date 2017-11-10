@@ -10,6 +10,8 @@
 
 
 <script>
+    import {getStore} from '../config/mUtils';
+
     export default {
         name : 'footer',
         props : ['page'],
@@ -18,11 +20,27 @@
             handlerHomePage() {
                 this.$router.push('/');
             },
+
             handlerUserListPage() {
-                this.$router.push('userList');
+
+                let userId = getStore('userId');
+
+                if(userId) {
+                    this.$router.push('userList');
+                }else{
+                    this.$router.push('login');
+                }   
             },
+            
             handlerMinePage() {
-                this.$router.push('mine');
+
+                let userId = getStore('userId');
+
+                if(userId) {
+                    this.$router.push('mine');
+                }else{
+                    this.$router.push('login');
+                } 
             },
         },
     }
