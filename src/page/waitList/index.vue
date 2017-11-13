@@ -3,61 +3,25 @@
     <div class="mine-content">
 
         <header-item title="待回答的问题"></header-item>
+        <loading v-if="loadingStatus"></loading>
+        <alert-tip v-if="showAlert" :alertText="alertText" @closeView="closeTip"></alert-tip>
 
         <div class="content">
 
-            <div class="item">
+            <div class="item" v-for="item in list">
 
                 <div class="top">
                     <div class="left">
                         <p class="head"></p>
-                        <p class="name">提问者</p>
+                        <p class="name">{{item.ask_username}}</p>
                     </div>
                     <div class="right">
-                        <p class="desc">春节还有几天？</p>
+                        <p class="desc">{{item.content}}</p>
                     </div>
                 </div>
- 
-            </div>
 
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
+                <div class="btn-box">
+                     <button type="button" class="ask-btn" @click="handlerAnswer(item._id)">回答</button>
                 </div>
  
             </div>
@@ -73,13 +37,54 @@
 
     import footerItem from '../../components/footer'
     import headerItem from '../../components/header.vue'
+    import loading from '../../components/loading.vue'
+    import alertTip from '../../components/alertTip.vue'
+    import {askWaitList} from '../../service/getData';
+    import {getStore} from '../../config/mUtils';
     
     export default {
         name : 'waitList',
         components : {
             footerItem,
-            headerItem
-        }
+            headerItem,
+            loading,
+            alertTip
+        },
+
+        data () {
+            return {
+                list : [],
+                loadingStatus : true,
+                showAlert : false,
+                alertText : null,
+            }
+        },
+
+        mounted () {
+           this.getList();
+        },
+
+        methods: {
+
+           async getList() {
+                let userId = getStore('userId');
+                let askData = await askWaitList(userId);
+
+                this.loadingStatus = false;
+
+                if(askData.status == 200) {
+                    this.list = askData.data;
+                }else{
+                    this.alertText = askData.message;
+                    this.showAlert = true;
+                    return;
+                }
+            },
+
+            handlerAnswer (id) {
+                this.$router.push('/repeat?id=' + id);
+            }
+        },
     }
 </script>
 
@@ -140,6 +145,23 @@
    .item{
        width: 100%;
        margin-bottom: 10px;
+   }
+   .btn-box{
+       width: 100%;
+       padding-bottom: 10px;
+       background-color: #fff;
+       text-align: right;
+   }
+   .ask-btn{
+       border:solid 1px #d81e06;
+       border-radius: 3px;
+       margin-right: 3%;
+       background-color: transparent;
+       color: #d81e06;
+       font-size: 14px;
+       height: 27px;
+       line-height: 25px;
+       padding:0 15px;
    }
 </style>
 

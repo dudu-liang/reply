@@ -2,24 +2,27 @@
 
     <div class="mine-content">
 
+        <loading v-if="loadingStatus"></loading>
+        <alert-tip v-if="showAlert" :alertText="alertText" @closeView="closeTip"></alert-tip>
+
         <div class="top">
             <div class="left">
                 <p class="head"></p>
-                <p class="name">提问者</p>
+                <p class="name">{{ask_username}}</p>
             </div>
             <div class="right">
-                <p class="desc">春节还有几天？</p>
+                <p class="desc">{{content}}</p>
             </div>
         </div>
 
         <div class="content">
            
-           <textarea class="area" placeholder="请输入你的回答(不超过100个字)..." maxlength="100"></textarea>
+           <textarea class="area" v-model="answer" placeholder="请输入你的回答(不超过100个字)..." maxlength="100"></textarea>
              
         </div>
 
         <div class="text-center">
-            <button type="button" class="submit">确认回答</button>
+            <button type="button" class="submit" @click="handlerSubmit">确认回答</button>
         </div>
 
         <footer-item page="mine"></footer-item>
@@ -29,13 +32,87 @@
 
 <script>
 
-    import footerItem from '../../components/footer'
+    import footerItem from '../../components/footer';
+    import loading from '../../components/loading.vue';
+    import alertTip from '../../components/alertTip.vue';
+
+    import {queryQuestion,answerQuestion} from '../../service/getData';
+
+    import {getQuery} from '../../config/mUtils';
     
     export default {
+
         name : 'repeat',
+
         components : {
-            footerItem
-        }
+            footerItem,
+            loading,
+            alertTip
+        },
+
+        data () {
+            return {
+                answer : null,
+                reply_username : null,
+                ask_username : null,
+                content : null,
+                loadingStatus : false,
+                showAlert : false,
+                alertText : null,
+
+            }
+        },
+
+        mounted () {
+            this.getData();
+        },
+
+        methods: {
+
+            async handlerSubmit() {
+
+                let id = getQuery('id');
+
+                if(this.answer == "") {
+                    this.alertText = '回答问题不能为空';
+                    this.showAlert = true;
+                    return;
+                }
+
+                let anwserData = await answerQuestion(id,this.answer);
+
+                console.log(anwserData);
+
+                if(anwserData.status == 200) {
+                    this.alertText = '回答成功';
+                    this.showAlert = true;
+                    setTimeout(() => {
+                        this.$router.push('mine');
+                    },1500);
+                }else{
+                    this.alertText = anwserData.message;
+                    this.showAlert = true;
+                    return;
+                }
+
+  
+            },
+
+            async getData () {
+
+                let id = getQuery('id');
+
+                let questionData = await queryQuestion(id);
+
+                this.content = questionData.data.content;
+                this.ask_username = questionData.data.ask_username;
+                
+            },
+
+            closeTip () {
+                this.showAlert = false;
+            }
+        },
     }
 </script>
 

@@ -3,81 +3,29 @@
     <div class="mine-content">
 
         <header-item title="我的提问"></header-item>
+        <loading v-if="loadingStatus"></loading>
+        <alert-tip v-if="showAlert" :alertText="alertText" @closeView="closeTip"></alert-tip>
 
         <div class="content">
 
-            <div class="item">
+            <div class="item" v-for="item in list">
 
                 <div class="top">
                     <div class="left">
                         <p class="head"></p>
-                        <p class="name">提问者</p>
+                        <p class="name">{{item.ask_username}}</p>
                     </div>
                     <div class="right">
-                        <p class="desc">春节还有几天？</p>
+                        <p class="desc">{{item.content}}</p>
                     </div>
                 </div>
 
-                <div class="info">
-                    就不告诉你，哈哈哈哈啊
+                <div class="info" v-if="item.status == 2">
+                    {{item.content}}
                 </div>
 
-                <div class="btn-box">
+                <div class="btn-box" v-if="item.status == 1">
                      <button type="button" class="ask-btn">待回答</button>
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
-
-                <div class="info">
-                    就不告诉你，哈哈哈哈啊
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
-
-                <div class="info">
-                    就不告诉你，哈哈哈哈啊
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
-
-                <div class="info">
-                    就不告诉你，哈哈哈哈啊
                 </div>
  
             </div>
@@ -93,12 +41,50 @@
 
     import footerItem from '../../components/footer'
     import headerItem from '../../components/header.vue'
+    import loading from '../../components/loading.vue'
+    import alertTip from '../../components/alertTip.vue'
+    import {askList} from '../../service/getData';
+    import {getStore} from '../../config/mUtils';
     
     export default {
         name : 'askList',
+
         components : {
             footerItem,
-            headerItem
+            headerItem,
+            loading,
+            alertTip
+        },
+
+        data () {
+            return {
+                list : [],
+                loadingStatus : true,
+                showAlert : false,
+                alertText : null,
+            }
+        },
+
+        mounted () {
+           this.getList();
+        },
+
+        methods: {
+
+           async getList() {
+                let userId = getStore('userId');
+                let askData = await askList(userId);
+
+                this.loadingStatus = false;
+
+                if(askData.status == 200) {
+                    this.list = askData.data;
+                }else{
+                    this.alertText = askData.message;
+                    this.showAlert = true;
+                    return;
+                }
+            }
         }
     }
 </script>

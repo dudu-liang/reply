@@ -13,19 +13,19 @@
 
         <div class="content">
 
-             <div class="line">
+             <div class="line" @click="handlerWaitPage">
                  待回答的问题
-                 <span class="number">0</span>
+                 <span class="number">{{unreqNumer}}</span>
              </div>
 
-             <div class="line">
+             <div class="line" @click="handlerAskPage">
                  我的提问
-                 <span class="number">0</span>
+                 <span class="number">{{askNumber}}</span>
              </div>
 
-             <div class="line">
+             <div class="line" @click="handlerAnswerPage">
                  我的回答
-                 <span class="number">0</span>
+                 <span class="number">{{answerNumber}}</span>
              </div>
              <div class="line" @click="handlerPage">
                   修改资料
@@ -51,7 +51,10 @@
                avatar : null,
                username : null,
                description : null,
-               baseUrl
+               baseUrl,
+               unreqNumer : null,
+               askNumber : null,
+               answerNumber : null
             }
         },
         mounted () {
@@ -75,6 +78,9 @@
                 this.avatar = userData.data.avatar;
                 this.username = userData.data.username;
                 this.description = userData.data.description;
+                this.unreqNumer = userData.data.unreqNumer;
+                this.askNumber = userData.data.askNumber;
+                this.answerNumber = userData.data.answerNumber;
              
             },
 
@@ -83,7 +89,19 @@
                 setTimeout(function() {
                     this.$router.push('login');
                 }.bind(this),1500);
-            }
+            },
+
+            handlerWaitPage () {
+                this.$router.push('waitList');
+            },
+
+            handlerAskPage () {
+                this.$router.push('askList');
+            },
+
+            handlerAnswerPage () {
+                this.$router.push('repeatList');
+            },
 
 
         },

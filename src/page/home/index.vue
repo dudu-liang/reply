@@ -2,6 +2,7 @@
 <template>
     <div>
         <footer-item page="home"></footer-item>
+        <div class="no-data">暂无提问</div>
     </div>
 </template>
 
@@ -15,7 +16,16 @@
             footerItem
         },
         created () {
-            console.log('首页');
+            
         }
     }
 </script>
+
+<style scoped>
+.no-data{
+    color: #999;
+    font-size: 15px;
+    text-align: center;
+    padding-top: 65%;
+}
+</style>

@@ -90,7 +90,17 @@
                 }
                 let askId = getStore('userId');
                 let askData = await askSave(this.replyId,askId,this.content);
-                console.log(askData);
+                if(askData.status == 200) {
+                    this.alertText = '提问成功';
+                    this.showAlert = true;
+                    setTimeout(function() {
+                        this.$router.push('home');
+                    }.bind(this), 1500);
+                }else{
+                    this.alertText = askData.message;
+                    this.showAlert = true;
+                    return;
+                }
 
             },
 

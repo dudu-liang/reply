@@ -3,77 +3,25 @@
     <div class="mine-content">
 
         <header-item title="我的回答"></header-item>
+        <loading v-if="loadingStatus"></loading>
+        <alert-tip v-if="showAlert" :alertText="alertText" @closeView="closeTip"></alert-tip>
 
         <div class="content">
 
-            <div class="item">
+            <div class="item" v-for="item in list">
 
                 <div class="top">
                     <div class="left">
                         <p class="head"></p>
-                        <p class="name">提问者</p>
+                        <p class="name">{{item.ask_username}}</p>
                     </div>
                     <div class="right">
-                        <p class="desc">春节还有几天？</p>
+                        <p class="desc">{{item.content}}</p>
                     </div>
                 </div>
 
                 <div class="info">
-                    就不告诉你，哈哈哈哈啊
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
-
-                <div class="info">
-                    就不告诉你，哈哈哈哈啊
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
-
-                <div class="info">
-                    就不告诉你，哈哈哈哈啊
-                </div>
- 
-            </div>
-
-            <div class="item">
-
-                <div class="top">
-                    <div class="left">
-                        <p class="head"></p>
-                        <p class="name">提问者</p>
-                    </div>
-                    <div class="right">
-                        <p class="desc">春节还有几天？</p>
-                    </div>
-                </div>
-
-                <div class="info">
-                    就不告诉你，哈哈哈哈啊
+                    {{item.answer}}
                 </div>
  
             </div>
@@ -87,15 +35,61 @@
 
 <script>
 
-    import footerItem from '../../components/footer'
-    import headerItem from '../../components/header.vue'
+    import footerItem from '../../components/footer';
+    import headerItem from '../../components/header.vue';
+    import loading from '../../components/loading.vue'
+    import alertTip from '../../components/alertTip.vue'
+    import {askAnswerList} from '../../service/getData';
+    import {getStore} from '../../config/mUtils';
     
     export default {
+
         name : 'repeatList',
+
+        data () {
+            return {
+                list : [],
+                loadingStatus : true,
+                showAlert : false,
+                alertText : null,
+            }
+        },
+
         components : {
             footerItem,
-            headerItem
-        }
+            headerItem,
+            loading,
+            alertTip
+        },
+
+        mounted () {
+            this.getData();
+        },
+
+        methods: {
+
+            async getData() {
+                
+                let userId = getStore('userId');
+                let data = await askAnswerList(userId);
+                this.loadingStatus = false;
+                this.list = data.data;
+
+                if(data.status != 200) {
+                    this.alertText = data.message;
+                    this.showAlert = true;
+                    return;
+                }
+            },
+
+            closeTip () {
+                this.showAlert = false;
+            }
+
+            
+
+
+        },
     }
 </script>
 
