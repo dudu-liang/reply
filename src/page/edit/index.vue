@@ -9,7 +9,7 @@
             <div class="line">
                 <span class="name">头像：</span>
                 <div class="head-box" :style="{backgroundImage:'url(' + baseUrl + avatar + ')'}">
-                   <input type="file" name="head" class="head-img" id="uploadImg" />
+                   <input type="file" name="avatar" class="head-img" id="uploadImg" @change="handlerUpload($event)" />
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
     import loading from '../../components/loading.vue'
     import alertTip from '../../components/alertTip.vue'
 
-    import {userOne,userUpdate} from '../../service/getData';
+    import {userOne,userUpdate,uploadImg} from '../../service/getData';
     import {baseUrl} from '../../config/env';
     import {getStore,clearStore} from '../../config/mUtils';
 
@@ -86,10 +86,14 @@
 
                 let userId = getStore('userId');
 
-                let editData = await userUpdate(userId,this.username,this.description);
+                let editData = await userUpdate(userId,this.username,this.description,this.avatar);
 
                 this.alertText = editData.message;
                 this.showAlert = true;
+
+                setTimeout(() => {
+                    this.$router.push('mine');
+                },1500);
 
             },
 
@@ -97,6 +101,48 @@
 
                 this.showAlert = false;
 
+            },
+
+            async handlerUpload (event) {
+
+                let file = event.target.files[0];
+
+                let data = new FormData();
+                    data.append('avatar',file);
+
+                    this.uploadImage(data,function(res) {
+
+                        if(res.status == 200) {
+
+                            this.avatar = res.data;
+
+                        }else{
+
+                            this.alertText = res.message;
+                            this.showAlert = true;
+                        }
+
+                    }.bind(this));
+                
+                
+            },
+
+            uploadImage (data,callback) {
+
+                $.ajax({
+                    cache: false,
+                    type: 'post',
+                    dataType: 'json',
+                    url:baseUrl + '/user/upload',
+                    data : data,
+                    contentType: false,
+                    processData: false,
+                    success : function (res) { 
+                        
+                        if(callback) callback(res);
+                    }
+
+                });
             }
         },
     }

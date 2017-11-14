@@ -4,25 +4,29 @@
 
         <div class="top">
             <div class="left">
-                <p class="head"></p>
-                <p class="name">提问者</p>
+                <p class="head" :style="{backgroundImage:'url(' + baseUrl + ask_avatar + ')'}"></p>
+                <p class="name">{{ask_username}}</p>
             </div>
             <div class="right">
-                <p class="desc">春节还有几天？</p>
+                <p class="desc">{{content}}</p>
             </div>
         </div>
+
+        <div class="btn-box" v-if="status == 1">
+                <button type="button" class="ask-btn">待回答</button>
+        </div>
         
-        <div class="line">
+        <div class="line" v-if="status == 2">
             回答
         </div>
 
-        <div class="top">
+        <div class="top" v-if="status == 2">
             <div class="left">
                 <p class="head"></p>
-                <p class="name">回答者</p>
+                <p class="name">{{reply_username}}</p>
             </div>
             <div class="right">
-                <p class="desc">就不告诉你</p>
+                <p class="desc">{{answer}}</p>
             </div>
         </div>
 
@@ -34,11 +38,69 @@
 <script>
 
     import footerItem from '../../components/footer'
-    
+    import loading from '../../components/loading.vue'
+    import alertTip from '../../components/alertTip.vue'
+    import {getQuery} from '../../config/mUtils';
+    import {queryQuestion} from '../../service/getData';
+    import {baseUrl} from '../../config/env';
+
     export default {
+
         name : 'detail',
+
         components : {
-            footerItem
+            footerItem,
+            loading,
+            alertTip
+        },
+
+        data () {
+            return {
+                loadingStatus : true,
+                showAlert : false,
+                alertText : null,
+                answer : null,
+                content : null,
+                ask_username : null,
+                reply_username : null,
+                status : 1,
+                ask_avatar : null,
+                reply_avatar : null,
+                baseUrl
+            }
+        },
+
+        mounted () {
+           this.getData();
+        },
+
+        methods : {
+          
+          async getData () {
+
+            let id = getQuery('id');
+            let queryData = await queryQuestion(id);
+
+            if(queryData.status != 200) {
+                this.alertText = queryData.message;
+                this.showAlert = true;
+                return;
+            }
+
+            this.answer = queryData.data.answer;
+            this.content = queryData.data.content;
+            this.ask_username = queryData.data.ask_username;
+            this.reply_username = queryData.data.reply_username;
+            this.ask_avatar = queryData.data.ask_avatar;
+            this.reply_avatar = queryData.data.reply_avatar;
+            this.status = queryData.data.status;
+              
+          }
+
+        },
+
+        closeTip () {
+            this.showAlert = false;
         }
     }
 </script>
@@ -97,6 +159,23 @@
        line-height: 30px;
        padding-left: 3%;
        color: #666;
+   }
+   .btn-box{
+       width: 100%;
+       padding-bottom: 10px;
+       background-color: #fff;
+       text-align: right;
+   }
+   .ask-btn{
+       border:solid 1px #d81e06;
+       border-radius: 3px;
+       margin-right: 3%;
+       background-color: transparent;
+       color: #d81e06;
+       font-size: 14px;
+       height: 27px;
+       line-height: 27px;
+       padding:0 15px;
    }
 </style>
 

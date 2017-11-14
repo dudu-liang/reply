@@ -29,10 +29,11 @@ export const userOne = (userId) => fetch('/user/message',{
 });
 
 //修改个人资料
-export const userUpdate = (userId,username,descciption) => fetch('/user/update',{
+export const userUpdate = (userId,username,descciption,avatar) => fetch('/user/update',{
 	username : username,
 	description : descciption,
-	id : userId
+	id : userId,
+	avatar : avatar
 }, 'POST');
 
 /*
@@ -71,6 +72,14 @@ export const answerQuestion = (id,answer) => fetch('/ask/answer', {
 export const queryQuestion = (id) => fetch('/ask/query', {
 	id : id
 });
+
+//首页问题列表
+export const homeAnswerList = () => fetch('/ask/homeAnswerList',{});
+
+//上传头像
+export const uploadImg = (avatar) => fetch('/user/upload',{
+	avatar : avatar
+},'POST');
 
 
 

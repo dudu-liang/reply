@@ -12,7 +12,7 @@
 
                 <div class="top">
                     <div class="left">
-                        <p class="head"></p>
+                        <p class="head" :style="{backgroundImage:'url(' + baseUrl + item.ask_avatar + ')'}"></p>
                         <p class="name">{{item.ask_username}}</p>
                     </div>
                     <div class="right">
@@ -41,6 +41,7 @@
     import alertTip from '../../components/alertTip.vue'
     import {askWaitList} from '../../service/getData';
     import {getStore} from '../../config/mUtils';
+    import {baseUrl} from '../../config/env';
     
     export default {
         name : 'waitList',
@@ -57,6 +58,7 @@
                 loadingStatus : true,
                 showAlert : false,
                 alertText : null,
+                baseUrl
             }
         },
 
@@ -115,7 +117,7 @@
        background-image: url('../../assets/head.jpg');
        background-position: center center;
        background-repeat: no-repeat;
-       background-size: 100% 100%;
+       background-size: cover;
    }
    .user-name{
        font-size: 15px;

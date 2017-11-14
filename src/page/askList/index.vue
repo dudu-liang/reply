@@ -12,7 +12,7 @@
 
                 <div class="top">
                     <div class="left">
-                        <p class="head"></p>
+                        <p class="head"  :style="{backgroundImage:'url(' + baseUrl + item.ask_avatar + ')'}"></p>
                         <p class="name">{{item.ask_username}}</p>
                     </div>
                     <div class="right">
@@ -30,6 +30,8 @@
  
             </div>
 
+            <div class="no-data" v-if="list.length == 0">暂无数据</div>
+
         </div>
 
         <footer-item page="mine"></footer-item>
@@ -45,6 +47,7 @@
     import alertTip from '../../components/alertTip.vue'
     import {askList} from '../../service/getData';
     import {getStore} from '../../config/mUtils';
+    import {baseUrl} from '../../config/env';
     
     export default {
         name : 'askList',
@@ -62,6 +65,7 @@
                 loadingStatus : true,
                 showAlert : false,
                 alertText : null,
+                baseUrl
             }
         },
 
@@ -84,6 +88,10 @@
                     this.showAlert = true;
                     return;
                 }
+            },
+
+            closeTip () {
+                this.showAlert = false;
             }
         }
     }
@@ -116,7 +124,7 @@
        background-image: url('../../assets/head.jpg');
        background-position: center center;
        background-repeat: no-repeat;
-       background-size: 100% 100%;
+       background-size: cover;
    }
    .user-name{
        font-size: 15px;
@@ -169,6 +177,12 @@
        height: 27px;
        line-height: 27px;
        padding:0 15px;
+   }
+   .no-data{
+       color:#666;
+       font-size:15px;
+       text-align:center;
+       padding-top:55%;
    }
 </style>
 

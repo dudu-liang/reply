@@ -24,6 +24,8 @@
 
             </div>
 
+            <div class="no-data" v-if="list.length == 0">暂无数据</div>
+
             
         </div>
 
@@ -155,6 +157,12 @@
        height: 27px;
        line-height: 27px;
        padding:0 15px;
+   }
+   .no-data{
+       color:#666;
+       font-size:15px;
+       text-align:center;
+       padding-top:55%;
    }
 </style>
 

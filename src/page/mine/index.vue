@@ -27,25 +27,38 @@
                  我的回答
                  <span class="number">{{answerNumber}}</span>
              </div>
+             
              <div class="line" @click="handlerPage">
                   修改资料
                   <img src="../../assets/right-arrow.png" class="right-arrow">
              </div>
+
+             <div class="line" @click="handlerLogout">
+                  退出登录
+                  <img src="../../assets/right-arrow.png" class="right-arrow">
+             </div>
+
         </div>
-        <div class="log-out" @click="handlerLogout">
-            退出登录
-        </div>
+
+
+        <footer-item page="mine"></footer-item>
     </div>
 </template>
 
 <script>
 
+    import footerItem from '../../components/footer';
     import {userOne} from '../../service/getData';
     import {baseUrl} from '../../config/env';
     import {getStore,clearStore} from '../../config/mUtils';
 
     export default {
         name : 'mine',
+
+        components : {
+            footerItem
+        },
+
         data () {
             return {
                avatar : null,

@@ -28,6 +28,7 @@
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.2);
+    z-index:9;
 }
 .alert-box{
     width: 75%;

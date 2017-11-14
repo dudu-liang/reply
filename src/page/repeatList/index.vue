@@ -8,11 +8,11 @@
 
         <div class="content">
 
-            <div class="item" v-for="item in list">
+            <div class="item" v-for="item in list" @click="handlerDetail(item._id)">
 
                 <div class="top">
                     <div class="left">
-                        <p class="head"></p>
+                        <p class="head" :style="{backgroundImage:'url(' + baseUrl + item.ask_avatar + ')'}"></p>
                         <p class="name">{{item.ask_username}}</p>
                     </div>
                     <div class="right">
@@ -25,6 +25,8 @@
                 </div>
  
             </div>
+
+            <div class="no-data" v-if="list.length == 0">暂无数据</div>
 
         </div>
 
@@ -41,6 +43,7 @@
     import alertTip from '../../components/alertTip.vue'
     import {askAnswerList} from '../../service/getData';
     import {getStore} from '../../config/mUtils';
+    import {baseUrl} from '../../config/env';
     
     export default {
 
@@ -52,6 +55,7 @@
                 loadingStatus : true,
                 showAlert : false,
                 alertText : null,
+                baseUrl
             }
         },
 
@@ -84,10 +88,11 @@
 
             closeTip () {
                 this.showAlert = false;
+            },
+
+            handlerDetail (id) {
+                this.$router.push('/detail?id=' + id);
             }
-
-            
-
 
         },
     }
@@ -120,7 +125,7 @@
        background-image: url('../../assets/head.jpg');
        background-position: center center;
        background-repeat: no-repeat;
-       background-size: 100% 100%;
+       background-size: cover;
    }
    .user-name{
        font-size: 15px;
@@ -156,6 +161,12 @@
        background-color: #fff;
        color: #666;
        font-size: 14px;
+   }
+   .no-data{
+       color:#666;
+       font-size:15px;
+       text-align:center;
+       padding-top:55%;
    }
 </style>
 
