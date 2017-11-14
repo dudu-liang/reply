@@ -7,7 +7,7 @@
 
         <div class="top">
             <div class="left">
-                <p class="head"></p>
+                <p class="head" :style="{backgroundImage:'url(' + baseUrl + ask_avatar + ')'}"></p>
                 <p class="name">{{ask_username}}</p>
             </div>
             <div class="right">
@@ -39,6 +39,8 @@
     import {queryQuestion,answerQuestion} from '../../service/getData';
 
     import {getQuery} from '../../config/mUtils';
+
+    import {baseUrl} from '../../config/env';
     
     export default {
 
@@ -55,10 +57,12 @@
                 answer : null,
                 reply_username : null,
                 ask_username : null,
+                ask_avatar : null,
                 content : null,
                 loadingStatus : false,
                 showAlert : false,
                 alertText : null,
+                baseUrl
 
             }
         },
@@ -73,15 +77,13 @@
 
                 let id = getQuery('id');
 
-                if(this.answer == "") {
+                if(!this.answer || this.answer == "") {
                     this.alertText = '回答问题不能为空';
                     this.showAlert = true;
                     return;
                 }
 
                 let anwserData = await answerQuestion(id,this.answer);
-
-                console.log(anwserData);
 
                 if(anwserData.status == 200) {
                     this.alertText = '回答成功';
@@ -106,6 +108,7 @@
 
                 this.content = questionData.data.content;
                 this.ask_username = questionData.data.ask_username;
+                this.ask_avatar = questionData.data.ask_avatar;
                 
             },
 
