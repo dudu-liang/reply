@@ -21,8 +21,16 @@
                     </div>
                 </div>
 
-                <div class="info">
-                    {{item.answer}}
+                <div class="answer-data">回答</div>
+
+                <div class="top">
+                    <div class="left">
+                        <p class="small-head" :style="{backgroundImage:'url(' + baseUrl + item.reply_avatar + ')'}"></p>
+                        <p class="small-name">{{item.reply_username}}</p>
+                    </div>
+                    <div class="right">
+                        <p class="desc">{{item.answer}}</p>
+                    </div>
                 </div>
  
             </div>
@@ -127,6 +135,18 @@
        background-repeat: no-repeat;
        background-size: cover;
    }
+   .small-head{
+       width: 60%;
+       padding-bottom: 60%;
+       border-radius: 200px;
+       display: inline-block;
+       background-color: #f2f2f2;
+       vertical-align: middle;
+       background-image: url('../../assets/head.jpg');
+       background-position: center center;
+       background-repeat: no-repeat;
+       background-size: cover;     
+   }
    .user-name{
        font-size: 15px;
        color: #333;
@@ -147,6 +167,11 @@
        font-size: 14px;
        color: #666;
    }
+   .small-name{
+       margin-top: 3px;
+       font-size: 13px;
+       color: #666;
+   }
    .content{
        width: 100%;
        padding-bottom: 70px;
@@ -155,6 +180,7 @@
    .item{
        width: 100%;
        margin-bottom: 10px;
+       border-bottom:solid 1px #eee;
    }
    .info{
        padding:0 3% 3% 3%;
@@ -167,5 +193,11 @@
        font-size:15px;
        text-align:center;
        padding-top:55%;
+   }
+   .answer-data{
+       height:30px;
+       line-height:30px;
+       padding-left:3%;
+       background-color:#fafafa;
    }
 </style>

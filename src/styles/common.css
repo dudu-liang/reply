@@ -4,6 +4,8 @@
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-overflow-scrolling: touch;
+    cursor: pointer;
+    -webkit-appearance: none;
 }
 ::-webkit-scrollbar{
   display: none;

@@ -67,7 +67,7 @@
                     this.showAlert = true;
                     setStore('userId',userInfo.data.id);
                     setTimeout(function() {
-                        this.$router.push('/home');
+                        this.$router.push('home');
                     }.bind(this), 1500);
                 }else{
                     this.alertText = userInfo.message;
@@ -99,18 +99,20 @@
        border:solid 1px #ccc;
        border-radius: 3px;
        padding-left: 5px;
-       height: 35px;
        margin-bottom: 20px;
+       height: 40px;
+       font-size:14px;
    }
    .btn{
        width: -webkit-calc(80% + 5px);
        background-color: #d81e06;
        border:none;
-       height: 35px;
-       line-height: 35px;
+       height: 40px;
+       line-height: 40px;
        color: #fff;
        border-radius: 3px;
        margin-top: 10%;
+       font-size:15px;
    }
    .no-user{
        font-size: 13px;

@@ -174,6 +174,7 @@
        resize: none;
        height: 120px;
        font-size: 14px;
+       border: none;
    }
    .submit{
        width: 60%;
