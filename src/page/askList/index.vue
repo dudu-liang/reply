@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="info" v-if="item.status == 2">
-                    {{item.content}}
+                    {{item.answer}}
                 </div>
 
                 <div class="btn-box" v-if="item.status == 1">
